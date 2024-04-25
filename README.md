@@ -38,6 +38,3 @@ The project directory is structured as follows:
 - `models/`: Contains machine learning models implemented in the project.
 - `images/`: Contains results obtained from model training and evaluation.
 - `exp/`: Contains experimental model which perform certainly better than the model on the main branch
-
-## Data
-The dataset used in this project is sourced from [Dataset](https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india) . It is available in .csv format and has undergone preprocessing steps such as filling missing values, outlier detection and feature engineering.
