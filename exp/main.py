@@ -15,8 +15,7 @@ import pandas as pd
 st.title('AQI Prediction App')
 st.write('This web app uses a machine learning model to\
           predict the Air Quality Index (AQI) of a city\
-          based on the input features such as PM2.5, PM10,\
-          NO, NO2, CO, O3, and SO2.')
+          based on the input features PM2.5 and PM10 only.')
 
 scaler = pickle.load(open('./exp/objects/scaler.pkl', 'rb'))
 model = pickle.load(open('./exp/objects/models/model_no_2.pkl', 'rb'))
