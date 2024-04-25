@@ -11,7 +11,7 @@ Machine Learning Project to predict the Air Quality Index
 Certainly experimental model performs better than the Main Model. Checkout these models from the link.
 
 ## Introduction/Overview
-This project aims to develop machine learning models to predict AQI. The models are trained on [!AQI Dataset][https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india] dataset and evaluated based on mean_squared_error.
+This project aims to develop machine learning models to predict AQI. The models are trained on [AQI Dataset][https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india] dataset and evaluated based on mean_squared_error.
 
 ## Getting Started
 To get started with the project, follow these steps:
@@ -40,4 +40,4 @@ The project directory is structured as follows:
 - `exp/`: Contains experimental model which perform certainly better than the model on the main branch
 
 ## Data
-The dataset used in this project is sourced from [!Dataset][https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india] . It is available in .csv format and has undergone preprocessing steps such as filling missing values, outlier detection and feature engineering.
+The dataset used in this project is sourced from [Dataset][https://www.kaggle.com/datasets/rohanrao/air-quality-data-in-india] . It is available in .csv format and has undergone preprocessing steps such as filling missing values, outlier detection and feature engineering.
