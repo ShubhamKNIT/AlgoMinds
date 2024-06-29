@@ -1,7 +1,7 @@
 # AlgoMinds
 Machine Learning Project to predict the Air Quality Index
 
-Demo Video: [Youtube Link][https://youtu.be/7dp8cNXx9pU]
+Demo Video: [Youtube Link](https://youtu.be/7dp8cNXx9pU)
 
 
 # Machine Learning Project
