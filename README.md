@@ -5,7 +5,7 @@ Machine Learning Project to predict the Air Quality Index
 # Machine Learning Project
 
 ## Live Model
-- Experimental Model: https://aqi-sgd.streamlit.app/
+- Experimental Model: https://aqisgd-model.streamlit.app/
 - Main Model: https://algominds-aqi-predictor.streamlit.app/
 
 Certainly experimental model performs better than the Main Model. Checkout these models from the link.
