@@ -3,9 +3,6 @@ Machine Learning Project to predict the Air Quality Index
 
 Demo Video: [Youtube Link](https://youtu.be/7dp8cNXx9pU)
 
-
-# Machine Learning Project
-
 ## Live Model
 - Experimental Model: https://aqisgd-model.streamlit.app/
 - Main Model: https://algominds-aqi-predictor.streamlit.app/
