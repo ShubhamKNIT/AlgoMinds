@@ -1,8 +1,8 @@
 # AlgoMinds
 Machine Learning Project to predict the Air Quality Index
 
-Demo Video 1: [Youtube Link](https://youtu.be/7dp8cNXx9pU)
-Demo Video 2: [Tensorflow Model](https://www.youtube.com/watch?v=5Rhdfst09Dc)
+- Demo Video 1: [Youtube Link](https://youtu.be/7dp8cNXx9pU)
+- Demo Video 2: [Tensorflow Model](https://www.youtube.com/watch?v=5Rhdfst09Dc)
 
 ## Live Model
 - Experimental Model: https://aqisgd-model.streamlit.app/
