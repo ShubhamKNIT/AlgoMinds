@@ -43,3 +43,4 @@ The project directory is structured as follows:
 - `models/`: Contains machine learning models implemented in the project.
 - `images/`: Contains results obtained from model training and evaluation.
 - `exp/`: Contains experimental model which perform certainly better than the model on the main branch
+- `DL_Models`: Tensorflow trained AQI Models
