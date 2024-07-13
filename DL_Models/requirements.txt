@@ -1,2 +1,2 @@
-streamlt=1.32.2
+streamlit
 tensorflow>=2.15.0
