@@ -1,11 +1,13 @@
 # AlgoMinds
 Machine Learning Project to predict the Air Quality Index
 
-Demo Video: [Youtube Link](https://youtu.be/7dp8cNXx9pU)
+- Demo Video 1: [Youtube Link](https://youtu.be/7dp8cNXx9pU)
+- Demo Video 2: [Tensorflow Model](https://www.youtube.com/watch?v=5Rhdfst09Dc)
 
 ## Live Model
 - Experimental Model: https://aqisgd-model.streamlit.app/
 - Main Model: https://algominds-aqi-predictor.streamlit.app/
+- Tensorflow Model: https://aqi-nn.streamlit.app/
 
 Certainly experimental model performs better than the Main Model. Checkout these models from the link.
 
@@ -30,6 +32,10 @@ To get started with the project, follow these steps:
    ```
    stremlit run exp/main.py
    ```
+   or
+   ```
+   streamlit run DL_Models/main.py
+   ```
 
 ## Project Structure
 The project directory is structured as follows:
@@ -37,3 +43,4 @@ The project directory is structured as follows:
 - `models/`: Contains machine learning models implemented in the project.
 - `images/`: Contains results obtained from model training and evaluation.
 - `exp/`: Contains experimental model which perform certainly better than the model on the main branch
+- `DL_Models`: Tensorflow trained AQI Models
