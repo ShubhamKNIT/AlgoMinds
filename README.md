@@ -32,6 +32,10 @@ To get started with the project, follow these steps:
    ```
    stremlit run exp/main.py
    ```
+   or
+   ```
+   streamlit run DL_Models/main.py
+   ```
 
 ## Project Structure
 The project directory is structured as follows:
