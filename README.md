@@ -26,11 +26,11 @@ To get started with the project, follow these steps:
    ```
 3. Run the code:
    ```
-   stremlit run frontend/main.py
+   streamlit run frontend/main.py
    ```
     or
    ```
-   stremlit run exp/main.py
+   streamlit run exp/main.py
    ```
    or
    ```
