@@ -5,13 +5,6 @@ import sklearn
 import os
 import pandas as pd
 
-# # Ignore warnings related to missing feature names
-# warnings.filterwarnings("ignore", 
-#                         category=UserWarning, 
-#                         message="X does not have valid feature names, \
-#                             but StandardScaler was fitted with feature names")
-
-
 st.title('AQI Prediction App')
 st.write('This web app uses a machine learning model to\
           predict the Air Quality Index (AQI) of a city\
@@ -46,17 +39,6 @@ input_data = {
     'SO2': SO2
 }
 
-input_data = {
-    'City': City,
-    'PM2.5': PM2_5,
-    'PM10': PM10,
-    'NO': NO,
-    'NO2': NO2,
-    'CO': CO,
-    'O3': O3,
-    'SO2': SO2
-}
-
 data = {}
 for feature in feature_cols:
     base_feature = feature.split('_')[0] 
@@ -69,19 +51,10 @@ data['City_Encoded'] = city_encoded_dict[City]
 data_df = pd.DataFrame([data], columns=feature_cols)
 data_scaled = scaler.transform(data_df)
 
-# col1, col2 = st.columns([2, 1.8])  # Divide the space into two columns
 
-# # Place the subheader in the first column
-# col1.subheader('Click on the Button to predict')
-
-# # Place the button in the second column
-# if col2.button('Predict'):
-#     prediction = model.predict(data_scaled)[0]
-#     st.write('Predicted AQI:', prediction)
-
-col1, col2 = st.columns([1, 1])  # Divide the space into two columns
 
 # Place the subheader in the first column
+col1, col2 = st.columns([1, 1])
 col1.subheader('Click on the Button to predict')
 
 # Place the button in the second column
@@ -115,14 +88,10 @@ if col2.button('Predict'):
 
 
 st.markdown('---')
-# st.write('Input Data', input_data)
-# st.write('Data', data)
-# st.write('Scaled Data', data_scaled)
-
 
 # Load and display images in a single frame
-image_folder = 'images'  # Path to your images folder
-image_files = sorted(os.listdir(image_folder))  # Sort image files
+image_folder = 'images' 
+image_files = sorted(os.listdir(image_folder)
 
 # Choose an initial image index
 st.subheader("Project Images")
