@@ -104,6 +104,11 @@ st.title(image_title)
 st.image(image_path, use_container_width=True)
 
 st.markdown('---')
+st.subheader('Best Predictions')
+st.write('Checkout this demo video to see the best predictions of the AQI using the models')
+
+# Display the youtube video
+st.video('https://youtu.be/7dp8cNXx9pU')
 
 st.subheader('Project Link')
 st.write('To know more about the project take a look on the Github repo link given below')
