@@ -4,8 +4,8 @@ import folium
 
 # Import your modules
 from features.fetch_coordinates import get_city_coordinates
-from features.fetch_aqi import fetch_aqi_data
-from features.fetch_weather import fetch_weather_data
+from features.air_quality import fetch_aqi_data
+from features.weather import fetch_weather_data
 
 
 # Initialize session state
