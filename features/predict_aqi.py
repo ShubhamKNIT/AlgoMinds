@@ -9,9 +9,9 @@ def predict_aqi_df(df, model_name="model_91"):
     """
     # Load model
     model_paths = {
-        "model_91": "./features/models/model_91.h5",
-        "model_169": "./features/models/model_169.h5",
-        "model_187": "./features/models/model_187.h5"
+        "model_91": "./models/model_91.h5",
+        "model_169": "./models/model_169.h5",
+        "model_187": "./models/model_187.h5"
     }
     if model_name not in model_paths:
         raise ValueError(f"Unknown model: {model_name}")
@@ -27,32 +27,31 @@ def predict_aqi_df(df, model_name="model_91"):
     predictions = model.predict(input_tensor).flatten()
 
     # AQI categories
-    aqi_quality_table = {
-        (0, 50): "Good",
-        (51, 100): "Fair",
-        (101, 150): "Moderate",
-        (151, 200): "Poor",
-        (201, 300): "Very Poor",
-        (301, float("inf")): "Severe",
-    }
-    qualities = []
-    for p in predictions:
-        for (low, high), label in aqi_quality_table.items():
-            if low <= p <= high:
-                qualities.append(label)
-                break
+    # aqi_quality_table = {
+    #     (0, 50): "Good",
+    #     (51, 100): "Fair",
+    #     (101, 150): "Moderate",
+    #     (151, 200): "Poor",
+    #     (201, 300): "Very Poor",
+    #     (301, float("inf")): "Severe",
+    # }
+    # qualities = []
+    # for p in predictions:
+    #     for (low, high), label in aqi_quality_table.items():
+    #         if low <= p <= high:
+    #             qualities.append(label)
+    #             break
 
     # Add to DataFrame
-    df = df.copy()
-    df['predicted_aqi'] = predictions
-    df['aqi_quality'] = qualities
+    df_ = df.copy(deep=True)
+    df_['aqi_predicted'] = predictions
+    # df_['aqi_quality'] = qualities
 
-    return df
+    return df_
 
-
-if __name__ == "__main__":
-    entry = [{"pm2_5": 35, "pm10": 50, "no2": 25, "co": 4000, "o3": 60, "so2": 10},
-             {"pm2_5": 40, "pm10": 55, "no2": 30, "co": 4500, "o3": 65, "so2": 15}]
-    df = pd.DataFrame(entry)
-    result = predict_aqi_df(df, "model_91")
-    print(result)
+# if __name__ == "__main__":
+#     entry = [{"pm2_5": 35, "pm10": 50, "no2": 25, "co": 4000, "o3": 60, "so2": 10},
+#              {"pm2_5": 40, "pm10": 55, "no2": 30, "co": 4500, "o3": 65, "so2": 15}]
+#     df = pd.DataFrame(entry)
+#     result = predict_aqi_df(df, "model_91")
+#     print(result)

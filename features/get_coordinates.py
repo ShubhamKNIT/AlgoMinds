@@ -1,7 +1,7 @@
 import requests
-from features.config import OPEN_WEATHER_API_KEY
+from config import OPEN_WEATHER_API_KEY
 
-def get_city_coordinates(city_name, country_code):
+def get_city_coordinates(city_name: str, country_code: str) -> dict:
     url = f"http://api.openweathermap.org/geo/1.0/direct?q={city_name},{country_code}&limit=1&appid={OPEN_WEATHER_API_KEY}"
     response = requests.get(url)
     

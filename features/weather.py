@@ -2,8 +2,10 @@ import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 from config import OPEN_WEATHER_API_KEY
+import base64
+import io
 
-def fetch_weather_now(city_name, country_code):
+def get_current_weather(city_name: str, country_code: str) -> dict:
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city_name},{country_code}&units=metric&appid={OPEN_WEATHER_API_KEY}"
     response = requests.get(url)
     
@@ -13,7 +15,7 @@ def fetch_weather_now(city_name, country_code):
     # print(f"Weather API Response: {response.json()}")  # Debugging line
     return response.json()
 
-def fetch_weather_forecast(city_name, country_code, cnt=7):
+def get_forecast_weather(city_name: str, country_code: str, cnt: int = 7) -> dict:
     url = f"http://api.openweathermap.org/data/2.5/forecast/daily?q={city_name},{country_code}&units=metric&cnt={cnt}&appid={OPEN_WEATHER_API_KEY}"
     response = requests.get(url)
 
@@ -22,7 +24,7 @@ def fetch_weather_forecast(city_name, country_code, cnt=7):
 
     return response.json()
 
-def clean_weather_forecast_data(raw_list):
+def clean_forecast_weather_data(raw_list: list) -> pd.DataFrame:
     """Convert OneCall daily forecast list into a clean DataFrame."""
     records = []
     for entry in raw_list:
@@ -67,7 +69,7 @@ def clean_weather_forecast_data(raw_list):
     df.set_index("date", inplace=True)
     return df
 
-def clean_weather_data(raw: dict) -> pd.DataFrame:
+def clean_forecast_weather_data(raw: dict) -> pd.DataFrame:
     record = {
         "city": raw.get("name"),
         "country": raw.get("sys", {}).get("country"),
@@ -104,16 +106,16 @@ def clean_weather_data(raw: dict) -> pd.DataFrame:
     df.set_index("dt", inplace=True)
     return df
 
-def plot_weather_forecast(df):
+def plot_temperature_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
     plt.figure(figsize=(12, 6))
-    
-    plt.plot(df.index, df["temp_day"], marker="o", label="Day Temp (°C)")
-    plt.plot(df.index, df["temp_min"], marker="s", label="Min Temp (°C)")
-    plt.plot(df.index, df["temp_max"], marker="^", label="Max Temp (°C)")
-    plt.plot(df.index, df["temp_night"], marker="x", label="Night Temp (°C)")
-    plt.plot(df.index, df["temp_eve"], marker="d", label="Evening Temp (°C)")
-    plt.plot(df.index, df["temp_morn"], marker="p", label="Morning Temp (°C)")
-    
+    markers = ["o", "s", "^", "x", "d", "p"]
+    columns = ["temp_day", "temp_min", "temp_max", "temp_night", "temp_eve", "temp_morn"]
+
+
+    for col, marker in zip(columns, markers):
+        if col in df.columns:
+            plt.plot(df.index, df[col], marker=marker, label=col.replace("_", " ").title())
+
     plt.title("7-Day Weather Forecast: Temperature Trends")
     plt.xlabel("Date")
     plt.ylabel("Temperature (°C)")
@@ -121,9 +123,17 @@ def plot_weather_forecast(df):
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.6)
     plt.tight_layout()
-    plt.show()
+    if return_base64:
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png")
+        buf.seek(0)
+        img_base64 = base64.b64encode(buf.read()).decode("utf-8")
+        plt.close()
+        return f"data:image/png;base64,{img_base64}"
+    else:
+        plt.show()
 
-def plot_rain_forecast(df):
+def plot_rain_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
     fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True)
 
     # Rainfall bar plot
@@ -146,9 +156,17 @@ def plot_rain_forecast(df):
 
     fig.suptitle("Rain & Precipitation Forecast (7 Days)", fontsize=14, y=1.05)
     plt.tight_layout()
-    plt.show()
+    if return_base64:
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png")
+        buf.seek(0)
+        img_base64 = base64.b64encode(buf.read()).decode("utf-8")
+        plt.close()
+        return f"data:image/png;base64,{img_base64}"
+    else:
+        plt.show()
 
-def plot_wind_forecast(df):
+def plot_wind_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
     plt.figure(figsize=(12, 6))
     plt.plot(df.index, df["wind_speed"], marker="o", label="Wind Speed (m/s)")
     plt.plot(df.index, df["wind_gust"], marker="^", linestyle="--", label="Wind Gust (m/s)")
@@ -160,4 +178,12 @@ def plot_wind_forecast(df):
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.6)
     plt.tight_layout()
-    plt.show()
+    if return_base64:
+        buf = io.BytesIO()
+        plt.savefig(buf, format="png")
+        buf.seek(0)
+        img_base64 = base64.b64encode(buf.read()).decode("utf-8")
+        plt.close()
+        return f"data:image/png;base64,{img_base64}"
+    else:
+        plt.show()
