@@ -24,6 +24,43 @@ def get_forecast_weather(city_name: str, country_code: str, cnt: int = 7) -> dic
 
     return response.json()
 
+def clean_current_weather_data(raw: dict) -> pd.DataFrame:
+    record = {
+        "city": raw.get("name"),
+        "country": raw.get("sys", {}).get("country"),
+        "dt": pd.to_datetime(raw.get("dt"), unit="s"),
+        "timezone": raw.get("timezone"),
+
+        # main metrics
+        "temp": raw["main"].get("temp"),
+        "feels_like": raw["main"].get("feels_like"),
+        "temp_min": raw["main"].get("temp_min"),
+        "temp_max": raw["main"].get("temp_max"),
+        "pressure": raw["main"].get("pressure"),
+        "humidity": raw["main"].get("humidity"),
+
+        # wind
+        "wind_speed": raw["wind"].get("speed"),
+        "wind_deg": raw["wind"].get("deg"),
+        "wind_gust": raw["wind"].get("gust"),
+
+        # clouds/visibility
+        "clouds": raw.get("clouds", {}).get("all"),
+        "visibility": raw.get("visibility"),
+
+        # weather desc
+        "weather_main": raw["weather"][0].get("main") if raw.get("weather") else None,
+        "weather_desc": raw["weather"][0].get("description") if raw.get("weather") else None,
+
+        # sunrise/sunset
+        "sunrise": pd.to_datetime(raw["sys"].get("sunrise"), unit="s"),
+        "sunset": pd.to_datetime(raw["sys"].get("sunset"), unit="s"),
+    }
+
+    df = pd.DataFrame([record])
+    df.set_index("dt", inplace=True)
+    return df
+
 def clean_forecast_weather_data(raw_list: list) -> pd.DataFrame:
     """Convert OneCall daily forecast list into a clean DataFrame."""
     records = []
@@ -68,70 +105,32 @@ def clean_forecast_weather_data(raw_list: list) -> pd.DataFrame:
     df = pd.DataFrame(records)
     df.set_index("date", inplace=True)
     return df
-
-def clean_forecast_weather_data(raw: dict) -> pd.DataFrame:
-    record = {
-        "city": raw.get("name"),
-        "country": raw.get("sys", {}).get("country"),
-        "dt": pd.to_datetime(raw.get("dt"), unit="s"),
-        "timezone": raw.get("timezone"),
-
-        # main metrics
-        "temp": raw["main"].get("temp"),
-        "feels_like": raw["main"].get("feels_like"),
-        "temp_min": raw["main"].get("temp_min"),
-        "temp_max": raw["main"].get("temp_max"),
-        "pressure": raw["main"].get("pressure"),
-        "humidity": raw["main"].get("humidity"),
-
-        # wind
-        "wind_speed": raw["wind"].get("speed"),
-        "wind_deg": raw["wind"].get("deg"),
-        "wind_gust": raw["wind"].get("gust"),
-
-        # clouds/visibility
-        "clouds": raw.get("clouds", {}).get("all"),
-        "visibility": raw.get("visibility"),
-
-        # weather desc
-        "weather_main": raw["weather"][0].get("main") if raw.get("weather") else None,
-        "weather_desc": raw["weather"][0].get("description") if raw.get("weather") else None,
-
-        # sunrise/sunset
-        "sunrise": pd.to_datetime(raw["sys"].get("sunrise"), unit="s"),
-        "sunset": pd.to_datetime(raw["sys"].get("sunset"), unit="s"),
-    }
-
-    df = pd.DataFrame([record])
-    df.set_index("dt", inplace=True)
-    return df
-
+    
 def plot_temperature_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
-    plt.figure(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 6))
     markers = ["o", "s", "^", "x", "d", "p"]
     columns = ["temp_day", "temp_min", "temp_max", "temp_night", "temp_eve", "temp_morn"]
-
-
     for col, marker in zip(columns, markers):
         if col in df.columns:
             plt.plot(df.index, df[col], marker=marker, label=col.replace("_", " ").title())
-
     plt.title("7-Day Weather Forecast: Temperature Trends")
     plt.xlabel("Date")
     plt.ylabel("Temperature (°C)")
     plt.xticks(rotation=45)
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.6)
-    plt.tight_layout()
+    fig.tight_layout()
     if return_base64:
         buf = io.BytesIO()
-        plt.savefig(buf, format="png")
+        fig.savefig(buf, format="png")
         buf.seek(0)
         img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-        plt.close()
+        plt.close(fig)
         return f"data:image/png;base64,{img_base64}"
     else:
         plt.show()
+        plt.close(fig)
+        return None
 
 def plot_rain_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
     fig, axes = plt.subplots(1, 2, figsize=(12, 6), sharex=True)
@@ -155,19 +154,22 @@ def plot_rain_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
         plt.setp(ax.get_xticklabels(), rotation=45, ha="right")
 
     fig.suptitle("Rain & Precipitation Forecast (7 Days)", fontsize=14, y=1.05)
-    plt.tight_layout()
+    fig.tight_layout()
     if return_base64:
         buf = io.BytesIO()
-        plt.savefig(buf, format="png")
+        fig.savefig(buf, format="png")
         buf.seek(0)
         img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-        plt.close()
+        plt.close(fig)
         return f"data:image/png;base64,{img_base64}"
     else:
         plt.show()
+        plt.close(fig)
+        return None
 
 def plot_wind_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
-    plt.figure(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 6))
+    # Plot wind speed and gust, with markers and distinct styles
     plt.plot(df.index, df["wind_speed"], marker="o", label="Wind Speed (m/s)")
     plt.plot(df.index, df["wind_gust"], marker="^", linestyle="--", label="Wind Gust (m/s)")
     
@@ -177,13 +179,15 @@ def plot_wind_data(df: pd.DataFrame, return_base64: bool = False) -> str | None:
     plt.xticks(rotation=45)
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.6)
-    plt.tight_layout()
+    fig.tight_layout()
     if return_base64:
         buf = io.BytesIO()
-        plt.savefig(buf, format="png")
+        fig.savefig(buf, format="png")
         buf.seek(0)
         img_base64 = base64.b64encode(buf.read()).decode("utf-8")
-        plt.close()
+        plt.close(fig)
         return f"data:image/png;base64,{img_base64}"
     else:
         plt.show()
+        plt.close(fig)
+        return None
