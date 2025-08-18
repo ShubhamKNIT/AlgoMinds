@@ -28,7 +28,7 @@ def clean_air_quality_data(data: dict, model_name: str = "model_91") -> pd.DataF
     records = []
     for entry in data:
         record = {
-            "datetime": datetime.fromtimestamp(entry["dt"].astype(int), tz=timezone.utc),
+            "datetime": datetime.fromtimestamp(entry["dt"]),
             "aqi_index": entry["main"]["aqi"],  # renamed for clarity
             "pm2_5": entry["components"]["pm2_5"],
             "pm10": entry["components"]["pm10"],
